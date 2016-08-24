@@ -39,7 +39,9 @@ function New-ForgeModule {
         [Parameter(Mandatory = $true)]
         [String]$Name,
 
-        [String]$Path = $Name
+        [String]$Path = $Name,
+
+        [String]$Description = "$Name module"
     )
 
     Process {
@@ -58,6 +60,8 @@ function New-ForgeModule {
 
         New-Item -Type Directory -Path "$Path\$Name" > $Null
         New-Item -Type File -Path "$Path\$Name\$Name.psm1" > $Null
+        New-ModuleManifest -Path "$Path\$Name\$Name.psd1" -RootModule "$Name.psm1" `
+            -ModuleVersion "0.1.0" -Description $Description
         New-Item -Type Directory -Path "$Path\Tests" > $Null
     }
 }

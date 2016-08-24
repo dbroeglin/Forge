@@ -27,6 +27,10 @@ Describe "New-ForgeModule" {
             "$TestPath\$Name\$Name.psm1" | Should Exist
         }
 
+        It "should create a manifest file" {
+            "$TestPath\$Name\$Name.psd1" | Should Exist
+        }
+
         It "should create a test directory" {
             "$TestPath\Tests" | Should Exist
         }        
