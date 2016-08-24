@@ -34,15 +34,18 @@ function New-ForgeScript {
     #>
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     Param(
-        [String]$Name = "New-Script",
+        [Parameter(Mandatory = $true)]
+        [String]$Name,
+
+        [Parameter()]
+        [String]$Path = "$Name.ps1",
 
         [Parameter()]
         [String[]]$Parameter = @()
     )
 
     Process {
-        $Path = "$Name.ps1"
-        if (!$PSCmdlet.ShouldProcess($Path, "Create script named $Name")) {
+        if (!$PSCmdlet.ShouldProcess($Name, "Create script")) {
             return
         }
 
@@ -54,14 +57,14 @@ function New-ForgeScript {
             "        `$$_"
         }) -join ",`n" 
         
-@"
+$Result = @"
 function $Name {
     <#
     .SYNOPSIS
-        $Path synopsis.
+        $Name synopsis.
 
     .DESCRIPTION
-        $Path description.
+        $Name description.
 
     .EXAMPLE
         $Name #...
