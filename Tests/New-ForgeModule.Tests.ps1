@@ -6,9 +6,15 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 
 Describe "New-ForgeModule" {
     $Name = "TestModule"
+    $TestPath = "TestDrive:\$Name" 
+    $Params = @{ 
+        Name = $Name
+        Path = $TestPath
+    }
+
     Context "-Name $Name -Path... "{
         $TestPath = "TestDrive:\$Name" 
-        New-ForgeModule -Name $Name -Path $TestPath
+        New-ForgeModule @Params
 
         It "should create a project directory" {
             $TestPath | Should Exist
@@ -34,6 +40,24 @@ Describe "New-ForgeModule" {
 
         It "should create a test directory" {
             "$TestPath\Tests" | Should Exist
+        }
+    }
+
+    Context "-License Apache" {
+        New-ForgeModule @Params -License Apache
+
+        It "should create an Apache LICENSE file" {
+            "$TestPath\LICENSE" | Should Exist
+            "$TestPath\LICENSE" | Should Contain "Apache License"            
+        }
+    }
+
+    Context "-License MIT" {
+        New-ForgeModule @Params -License MIT
+
+        It "should create a MIT LICENSE file" {
+            "$TestPath\LICENSE" | Should Exist
+            "$TestPath\LICENSE" | Should Contain "The MIT License"            
         }
     }
 }

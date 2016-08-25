@@ -36,6 +36,8 @@ function New-ForgeModule {
     .PARAMETER Path
         The path where the new module is created.
 
+    .PARAMETER Description
+        The description of new module.   
     #>
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     Param(
@@ -44,7 +46,10 @@ function New-ForgeModule {
 
         [String]$Path = $Name,
 
-        [String]$Description = "$Name module"
+        [String]$Description = "$Name module",
+
+        [ValidateSet('Apache', 'MIT')]
+        [String]$License
     )
 
     Process {
@@ -52,7 +57,8 @@ function New-ForgeModule {
             return
         }
         $Binding = @{
-            Name = $Name        
+            Name        = $Name
+            Description = $Description
         }
 
         New-Item -Type Directory -Path $Path > $Null
@@ -65,6 +71,10 @@ function New-ForgeModule {
         New-ModuleManifest -Path "$Path\$Name\$Name.psd1" -RootModule "$Name.psm1" `
             -ModuleVersion "0.1.0" -Description $Description
         New-Item -Type Directory -Path "$Path\Tests" > $Null
+
+        if ($License) {
+            Copy-Item "$SkeletonsPath\LICENSE.$License" "$Path\LICENSE"
+        }
     }
 }
 
