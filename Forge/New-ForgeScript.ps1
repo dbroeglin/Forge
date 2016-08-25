@@ -49,15 +49,15 @@ function New-ForgeScript {
             return
         }
 
-        $CommentParamBlock = ($Parameter | % {
+        $CommentParamBlock = ($Parameter | ForEach-Object {
             "    .PARAMETER $_`n        $_ description."
         }) -join "`n`n" 
 
-        $ParamBlock = ($Parameter | % {
+        $ParamBlock = ($Parameter | ForEach-Object {
             "        `$$_"
         }) -join ",`n" 
         
-$Result = @"
+        @"
 function $Name {
     <#
     .SYNOPSIS
