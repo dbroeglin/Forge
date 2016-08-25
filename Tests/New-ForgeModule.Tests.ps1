@@ -1,3 +1,4 @@
+Set-PSDebug -Strict
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 . "$here\..\Forge\$sut"
@@ -5,7 +6,6 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 
 Describe "New-ForgeModule" {
     $Name = "TestModule"
-
     Context "-Name $Name -Path... "{
         $TestPath = "TestDrive:\$Name" 
         New-ForgeModule -Name $Name -Path $TestPath
@@ -25,6 +25,7 @@ Describe "New-ForgeModule" {
 
         It "should create a module file" {
             "$TestPath\$Name\$Name.psm1" | Should Exist
+            "$TestPath\$Name\$Name.psm1" | Should Contain "Set-StrictMode"
         }
 
         It "should create a manifest file" {
@@ -33,6 +34,6 @@ Describe "New-ForgeModule" {
 
         It "should create a test directory" {
             "$TestPath\Tests" | Should Exist
-        }        
+        }
     }
 }

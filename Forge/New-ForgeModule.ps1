@@ -16,6 +16,9 @@ limitations under the License.
 
 Import-Module EPS -MinimumVersion "0.2.0"
 
+$SkeletonsPath = "$(Split-Path -Parent $PSScriptRoot)\Forge\Skeletons\Module"
+
+
 function New-ForgeModule {
     <#
     .SYNOPSIS
@@ -48,20 +51,32 @@ function New-ForgeModule {
         if (!$PSCmdlet.ShouldProcess($Name, "Create module")) {
             return
         }
-        $SkeletonsPath = "$(Split-Path -Parent $PSCommandPath)\Skeletons\Module"
+        $Binding = @{
+            Name = $Name        
+        }
+
         New-Item -Type Directory -Path $Path > $Null
 
-        $Template = Get-Content -Raw "$SkeletonsPath\README.md.eps"
-        $Binding = @{ 
-            Name = $Name
-        }
-        Expand-Template -Template $template -Binding $Binding|
-            Out-File "$Path\README.md" -Encoding UTF8
+        Expand-ForgeTemplate -Name "README.md" -Path "$Path\README.md" -Binding $Binding
 
         New-Item -Type Directory -Path "$Path\$Name" > $Null
-        New-Item -Type File -Path "$Path\$Name\$Name.psm1" > $Null
+        Expand-ForgeTemplate -Name "Module.psm1" -Path "$Path\$Name\$Name.psm1" -Binding $Binding
+
         New-ModuleManifest -Path "$Path\$Name\$Name.psd1" -RootModule "$Name.psm1" `
             -ModuleVersion "0.1.0" -Description $Description
         New-Item -Type Directory -Path "$Path\Tests" > $Null
     }
+}
+
+function Expand-ForgeTemplate {
+    Param(
+        [String]$Name,
+
+        [String]$Path,
+
+        [PSCustomObject]$Binding
+    )
+    $Template = Get-Content -Raw "$SkeletonsPath\$Name.eps"
+    Expand-Template -Template $template -Binding $Binding |
+        Out-File $Path -Encoding UTF8    
 }
