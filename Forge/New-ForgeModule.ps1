@@ -14,10 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-Import-Module EPS -MinimumVersion "0.2.0"
-
-$SkeletonsPath = "$(Split-Path -Parent $PSScriptRoot)\Forge\Skeletons\Module"
-
+$SourcesPath     = "$($SkeletonsPath)\Module"
+$DestinationPath = $Null
+$Binding         = @{}
 
 function New-ForgeModule {
     <#
@@ -56,37 +55,49 @@ function New-ForgeModule {
         if (!$PSCmdlet.ShouldProcess($Name, "Create module")) {
             return
         }
-        $Binding = @{
-            Name        = $Name
-            Description = $Description
+        $Script:DestinationPath = $Path
+        $Script:Binding = @{
+            Name         = $Name
+            Description  = $Description
         }
+        Write-Host "COUCOU: $(Get-Variable -Scope Local| Select-Object -Expand name)"
+        Write-Host "CUICUI: $($PSBoundParameters | % { $_.ToString() })"
+        New-ForgeDirectory
+        Copy-ForgeFile -Source "README.md"
 
-        New-Item -Type Directory -Path $Path > $Null
-
-        Expand-ForgeTemplate -Name "README.md" -Path "$Path\README.md" -Binding $Binding
-
-        New-Item -Type Directory -Path "$Path\$Name" > $Null
-        Expand-ForgeTemplate -Name "Module.psm1" -Path "$Path\$Name\$Name.psm1" -Binding $Binding
+        New-ForgeDirectory -Dest $Name
+        Copy-ForgeFile -Source "Module.psm1" -Dest "$Name\$Name.psm1"
 
         New-ModuleManifest -Path "$Path\$Name\$Name.psd1" -RootModule "$Name.psm1" `
             -ModuleVersion "0.1.0" -Description $Description
-        New-Item -Type Directory -Path "$Path\Tests" > $Null
+        New-ForgeDirectory -Dest "Tests"    
 
         if ($License) {
-            Copy-Item "$SkeletonsPath\LICENSE.$License" "$Path\LICENSE"
+            Copy-ForgeFile -Source "LICENSE.$License" -Dest "LICENSE"
         }
     }
 }
 
-function Expand-ForgeTemplate {
+function New-ForgeFile {
+
+}
+
+function New-ForgeDirectory {
     Param(
-        [String]$Name,
-
-        [String]$Path,
-
-        [PSCustomObject]$Binding
+        [String]$Destination = ""
     )
-    $Template = Get-Content -Raw "$SkeletonsPath\$Name.eps"
+    New-Item -Type Directory -Path "$DestinationPath\$Destination" > $Null    
+}
+
+function Copy-ForgeFile {
+    Param(
+        [String]$Source,
+
+        [String]$Destination = $Source,
+
+        [PSCustomObject]$Binding = $Script:Binding
+    )
+    $Template = Get-Content -Raw "$SourcesPath\$Source"
     Expand-Template -Template $template -Binding $Binding |
-        Out-File $Path -Encoding UTF8    
+        Out-File "$DestinationPath\$Destination" -Encoding UTF8
 }
