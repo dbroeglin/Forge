@@ -1,20 +1,22 @@
 Set-PSDebug -Strict
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
+. "$here\..\Forge\_Context.ps1"
 . "$here\..\Forge\$sut"
 
 
 Describe "New-ForgeModule" {
     $Name = "TestModule"
-    $TestPath = "TestDrive:\$Name" 
+    $TestPath = Join-Path $TestDrive $Name 
     $Params = @{ 
-        Name = $Name
-        Path = $TestPath
+        Name   = $Name
+        Path   = $TestPath
+        Author = "Jane Doe"
     }
 
     Context "-Name $Name -Path... "{
         $TestPath = "TestDrive:\$Name" 
-        New-ForgeModule @Params
+        New-ForgeModule @Params 
 
         It "should create a project directory" {
             $TestPath | Should Exist
@@ -36,6 +38,7 @@ Describe "New-ForgeModule" {
 
         It "should create a manifest file" {
             "$TestPath\$Name\$Name.psd1" | Should Exist
+            "$TestPath\$Name\$Name.psd1" | Should Contain "Jane Doe"
         }
 
         It "should create a test directory" {
@@ -49,6 +52,7 @@ Describe "New-ForgeModule" {
         It "should create an Apache LICENSE file" {
             "$TestPath\LICENSE" | Should Exist
             "$TestPath\LICENSE" | Should Contain "Apache License"            
+            "$TestPath\LICENSE" | Should Contain "$(Get-Date -UF %Y) Jane Doe"
         }
     }
 
@@ -57,7 +61,8 @@ Describe "New-ForgeModule" {
 
         It "should create a MIT LICENSE file" {
             "$TestPath\LICENSE" | Should Exist
-            "$TestPath\LICENSE" | Should Contain "The MIT License"            
+            "$TestPath\LICENSE" | Should Contain "MIT License"
+            "$TestPath\LICENSE" | Should Contain "$(Get-Date -UF %Y) Jane Doe"
         }
     }
 }

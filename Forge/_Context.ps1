@@ -1,0 +1,1 @@
+$SkeletonsPath = "$(Split-Path -Parent $PSScriptRoot)\Forge\Skeletons"

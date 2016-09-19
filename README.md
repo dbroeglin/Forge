@@ -1,14 +1,39 @@
-# Forge
-PowerShell code generation (aka scaffolding) module. Aims at making starting a new 
-PowerShell project a snap by using templates to generate scripts or whole projects 
-in just one command.
+﻿# TestModule PowerShell module
 
-# Getting started
+Module TestModule has been generated with Forge.
 
-This cmdlet creates a new PowerShell script:
+# Installation
 
-    New-ForgeScript -Name MyScript -Parameters a,b,c
+    Install-Module Forge
 
-This cmdlet create a new PowerShell module project in the `MyModule` directory:
+# Example
 
-    New-ForgeModule -Name MyModule
+The following commands should generate a module named `PoshTodo`:
+
+    New-ForgeModule -Name PoshTodo -License MIT -Author Léa -Email lea@example.com
+
+Would create, in the current directory a scaffold for module `PoshTodo` with the following
+structure:
+
+    ./PoshTodo
+    ├── LICENSE
+    ├── PoshTodo
+    │   ├── PoshTodo.psd1
+    │   └── PoshTodo.psm1
+    ├── README.md
+    └── Tests
+
+# Dependencies
+
+## Run time
+
+At run time, the following modules are required:
+
+    Install-Module EPS
+
+## Build time
+
+Additionally, at build time, the following modules are required:
+
+    Install-Module Pester
+

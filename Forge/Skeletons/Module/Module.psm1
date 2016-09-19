@@ -1,3 +1,4 @@
+$ErrorActionPreference = "Stop"
 Set-StrictMode -Version 3
 
 # Load functions

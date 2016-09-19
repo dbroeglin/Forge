@@ -14,10 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-Import-Module EPS -MinimumVersion "0.2.0"
-
-$SkeletonsPath = "$(Split-Path -Parent $PSScriptRoot)\Forge\Skeletons\Module"
-
+$SourcesPath     = "$($SkeletonsPath)\Module"
+$DestinationPath = $Null
+$Binding         = @{}
 
 function New-ForgeModule {
     <#
@@ -49,44 +48,82 @@ function New-ForgeModule {
         [String]$Description = "$Name module",
 
         [ValidateSet('Apache', 'MIT')]
-        [String]$License
+        [String]$License,
+
+        [String]$Author,
+
+        [String]$Email,
+
+        [String]$GitCommand = "git"
     )
 
     Process {
         if (!$PSCmdlet.ShouldProcess($Name, "Create module")) {
             return
         }
-        $Binding = @{
-            Name        = $Name
-            Description = $Description
+        $Author = Get-ValueOrGitOrDefault $Author "user.user" "JohnDoe"
+        $Email  = Get-ValueOrGitOrDefault $Email "user.email" "JohnDoe@example.com"
+
+        $CopyrightYear = Get-Date -UFormat %Y
+        $Script:DestinationPath = $Path
+        $Script:Binding = @{
+            Name          = $Name
+            Description   = $Description
+            Author        = $Author
+            Email         = $Email
+            CopyrightYear = $CopyrightYear
         }
 
-        New-Item -Type Directory -Path $Path > $Null
+        New-ForgeDirectory
+        Copy-ForgeFile -Source "README.md"
 
-        Expand-ForgeTemplate -Name "README.md" -Path "$Path\README.md" -Binding $Binding
-
-        New-Item -Type Directory -Path "$Path\$Name" > $Null
-        Expand-ForgeTemplate -Name "Module.psm1" -Path "$Path\$Name\$Name.psm1" -Binding $Binding
+        New-ForgeDirectory -Dest $Name
+        Copy-ForgeFile -Source "Module.psm1" -Dest "$Name\$Name.psm1"
 
         New-ModuleManifest -Path "$Path\$Name\$Name.psd1" -RootModule "$Name.psm1" `
-            -ModuleVersion "0.1.0" -Description $Description
-        New-Item -Type Directory -Path "$Path\Tests" > $Null
+            -ModuleVersion "0.1.0" -Description $Description -Author $Author `
+            -Copyright "(c) $CopyrightYear $Author. All rights reserved."
+        New-ForgeDirectory -Dest "Tests"
 
         if ($License) {
-            Copy-Item "$SkeletonsPath\LICENSE.$License" "$Path\LICENSE"
+            Copy-ForgeFile -Source "LICENSE.$License" -Dest "LICENSE"
         }
     }
 }
 
-function Expand-ForgeTemplate {
+function New-ForgeFile {
+
+}
+
+function New-ForgeDirectory {
     Param(
-        [String]$Name,
-
-        [String]$Path,
-
-        [PSCustomObject]$Binding
+        [String]$Destination = ""
     )
-    $Template = Get-Content -Raw "$SkeletonsPath\$Name.eps"
-    Expand-Template -Template $template -Binding $Binding |
-        Out-File $Path -Encoding UTF8    
+    New-Item -Type Directory -Path (Join-Path $DestinationPath $Destination) > $Null
+}
+
+function Copy-ForgeFile {
+    Param(
+        [String]$Source,
+
+        [String]$Destination = $Source,
+
+        [PSCustomObject]$Binding = $Script:Binding
+    )
+    $Template = Get-Content -Raw (Join-Path $SourcesPath $Source)
+    # Write as UTF-8 without BOM
+    [System.IO.File]::WriteAllText((Join-Path $DestinationPath $Destination),
+        (Expand-Template -Template $template -Binding $Binding))
+}
+
+function Get-ValueOrGitOrDefault {
+    Param([String]$Value, [String]$GitConfigKey, [String]$Default)
+
+    if ([string]::IsNullOrWhitespace($Value)) {
+        if (-not (Get-Command $GitCommand -ErrorAction SilentlyContinue) -or
+            [string]::IsNullOrWhitespace(($Value = (& $GitCommand config $GitConfigKey)))) {
+            $Value = $Default
+        }
+    }
+    return $Value
 }
