@@ -61,11 +61,11 @@ function New-ForgeModule {
         if (!$PSCmdlet.ShouldProcess($Name, "Create module")) {
             return
         }
-        $Author = Get-ValueOrGitOrDefault $Author "user.user" "JohnDoe"
+        $Author = Get-ValueOrGitOrDefault $Author "user.user" "John Doe"
         $Email  = Get-ValueOrGitOrDefault $Email "user.email" "JohnDoe@example.com"
 
         $CopyrightYear = Get-Date -UFormat %Y
-        $Script:DestinationPath = $Path
+        $Script:DestinationPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
         $Script:Binding = @{
             Name          = $Name
             Description   = $Description
@@ -112,7 +112,7 @@ function Copy-ForgeFile {
     )
     $Template = Get-Content -Raw (Join-Path $SourcesPath $Source)
     # Write as UTF-8 without BOM
-    [System.IO.File]::WriteAllText((Join-Path $DestinationPath $Destination),
+    [System.IO.File]::WriteAllText((Join-Path $Script:DestinationPath $Destination),
         (Expand-Template -Template $template -Binding $Binding))
 }
 
