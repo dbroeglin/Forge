@@ -9,6 +9,25 @@ Describe "New-ForgeModuleScript" {
     $FunctionName = "TestFunction"
     $TestPath   = Setup -Dir $ModuleName -Passthru
 
+    Context "-Name $FunctionName -Parameter a,b,c" {
+        $ModulePath = Setup -Dir (Join-Path $ModuleName $ModuleName) -Passthru
+        $TestsPath  = Setup -Dir (Join-Path $ModuleName Tests) -Passthru
+        $FunctionName = "TestFunction1"
+
+        it "should generate a function file" {
+            $FunctionPath = (Join-Path $ModulePath "$FunctionName.ps1")
+            $FunctionTestPath = (Join-Path Tests "$FunctionName.Tests.ps1")
+
+            New-ForgeModuleFunction -Name $FunctionName -Parameter a1,b1,c1
+            Write-Host (Get-Content -Raw $FunctionPath) 
+            $FunctionPath     | Should Exist
+            $FunctionPath     | Should Contain "a1,"
+            $FunctionPath     | Should Contain "b1,"
+            $FunctionPath     | Should Contain "c1"
+            $FunctionTestPath | Should Exist
+        }
+    }
+
     Context "-Name $FunctionName" {
         $ModulePath = Setup -Dir (Join-Path $ModuleName $ModuleName) -Passthru
         $TestsPath  = Setup -Dir (Join-Path $ModuleName Tests) -Passthru
@@ -17,15 +36,6 @@ Describe "New-ForgeModuleScript" {
             New-ForgeModuleFunction -Name $FunctionName 
             (Join-Path $ModulePath "$FunctionName.ps1") | Should Exist
             (Join-Path Tests "$FunctionName.Tests.ps1") | Should Exist
-        }
-
-        BeforeEach {
-            $Script:OldLocation = Get-Location
-            Set-Location $TestPath            
-        }
-
-        AfterEach {
-            Set-Location $Script:OldLocation            
         }
     }
 
@@ -38,13 +48,7 @@ Describe "New-ForgeModuleScript" {
             } | Should Throw "Module directory 'TestModule' does not exist"            
         }
 
-        BeforeEach {
-            $Script:OldLocation = Get-Location
-            Set-Location $TestPath            
-        }
-
         AfterEach {
-            Set-Location $Script:OldLocation            
             Remove-Item $TestsPath 
         }
     }
@@ -59,14 +63,18 @@ Describe "New-ForgeModuleScript" {
             
         }
 
-        BeforeEach {
-            $Script:OldLocation = Get-Location
-            Set-Location $TestPath            
-        }
-
         AfterEach {
-            Set-Location $Script:OldLocation            
             Remove-Item $ModulePath 
         }
     }
+
+    BeforeEach {
+        $Script:OldLocation = Get-Location
+        Set-Location $TestPath
+    }
+
+    AfterEach {
+        Set-Location $Script:OldLocation
+    }
+    
 }

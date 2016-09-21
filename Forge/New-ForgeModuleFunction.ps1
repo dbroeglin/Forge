@@ -33,7 +33,10 @@ function New-ForgeModuleFunction {
         [Parameter(Mandatory = $true)]
         [String]$Name,
 
-        [String]$ModuleName
+        [String]$ModuleName,
+
+        [Parameter()]
+        [String[]]$Parameter = @()
     )
     Begin {
         $Script:SourcesPath     = Join-Path $ScaffoldsPath ModuleFunction
@@ -47,9 +50,10 @@ function New-ForgeModuleFunction {
         if (-not (Test-Path -PathType Container 'Tests')) {
             throw "Test directory 'Tests' does not exist"
         }
-        $Script:Binding         = @{
-            Name = $Name
+        $Script:Binding = @{
+            Name       = $Name
             ModuleName = $ModuleName
+            Parameters = $Parameter
         }
 
 

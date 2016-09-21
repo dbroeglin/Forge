@@ -6,12 +6,19 @@ function <%= $Name %> {
     .DESCRIPTION
         <%= $Name %> description.
 
+<% $Parameters | ForEach { %>
+    .PARAMETER <%= $_ %>
+        <%= $_ %> description.
+
+<% } %>
     .EXAMPLE
         <%= $Name %> #...
     #>
     [CmdletBinding()]
     Param(
-
+<% $Parameters | ForEach { $i = 1 } { %>
+       <%= $_ %><%= if ($i++ -lt $Parameters.length) { "," } %>
+<% } %>
     )
     Begin {
         # Begin block
