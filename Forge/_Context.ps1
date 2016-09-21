@@ -1,1 +1,1 @@
-$SkeletonsPath = Join-Path $PSScriptRoot Skeletons
+$ScaffoldsPath = Join-Path $PSScriptRoot Scaffolds
