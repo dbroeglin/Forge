@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 #>
 
-$SourcesPath     = Join-Path $ScaffoldsPath Module
 $DestinationPath = $Null
 $Binding         = @{}
 
@@ -56,7 +55,11 @@ function New-ForgeModule {
 
         [String]$GitCommand = "git"
     )
-
+    Begin {
+        $Script:SourcesPath     = Join-Path $ScaffoldsPath Module
+        $Script:Binding         = @{}
+        $Script:DestinationPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
+    }
     Process {
         if (!$PSCmdlet.ShouldProcess($Name, "Create module")) {
             return
@@ -65,7 +68,6 @@ function New-ForgeModule {
         $Email  = Get-ValueOrGitOrDefault $Email "user.email" "JohnDoe@example.com"
 
         $CopyrightYear = Get-Date -UFormat %Y
-        $Script:DestinationPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
         $Script:Binding = @{
             Name          = $Name
             Description   = $Description
@@ -89,41 +91,4 @@ function New-ForgeModule {
             Copy-ForgeFile -Source "LICENSE.$License" -Dest "LICENSE"
         }
     }
-}
-
-function New-ForgeFile {
-
-}
-
-function New-ForgeDirectory {
-    Param(
-        [String]$Destination = ""
-    )
-    New-Item -Type Directory -Path (Join-Path $DestinationPath $Destination) > $Null
-}
-
-function Copy-ForgeFile {
-    Param(
-        [String]$Source,
-
-        [String]$Destination = $Source,
-
-        [PSCustomObject]$Binding = $Script:Binding
-    )
-    $Template = Get-Content -Raw (Join-Path $SourcesPath $Source)
-    # Write as UTF-8 without BOM
-    [System.IO.File]::WriteAllText((Join-Path $Script:DestinationPath $Destination),
-        (Expand-Template -Template $template -Binding $Binding))
-}
-
-function Get-ValueOrGitOrDefault {
-    Param([String]$Value, [String]$GitConfigKey, [String]$Default)
-
-    if ([string]::IsNullOrWhitespace($Value)) {
-        if (-not (Get-Command $GitCommand -ErrorAction SilentlyContinue) -or
-            [string]::IsNullOrWhitespace(($Value = (& $GitCommand config $GitConfigKey)))) {
-            $Value = $Default
-        }
-    }
-    return $Value
 }

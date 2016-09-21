@@ -18,5 +18,7 @@ $ErrorActionPreference = "Stop"
 Set-StrictMode -Version 3
 
 # Load functions
-$functions = Get-ChildItem -Path $PSScriptRoot -Recurse -Include *.ps1 | Sort
+$functions = Get-ChildItem -Path $PSScriptRoot -Recurse -Include *.ps1 | 
+    Where-Object { -not ($_.Fullname -match "Scaffold") } |
+    Sort-Object
 $functions | ForEach-Object { . $_.FullName }
