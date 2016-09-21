@@ -1,3 +1,9 @@
+0.3.1 (September 21, 2016)
+ * Added New-ForgeModuleFunction to generate module functions
+ * Renamed Skeletons dir to Scaffolds
+ * Bumping version number to 0.3.1
+ * Added Vagrantfile to for easy testing on Mac
+ * Corrected base skeletons path computation
 0.3.0 (September 21, 2016)
  * Added .gitignore
  * Fixed loading order and win relative path resolution
