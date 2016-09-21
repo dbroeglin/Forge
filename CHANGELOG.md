@@ -1,3 +1,6 @@
+0.3.0 (September 21, 2016)
+ * Added .gitignore
+ * Fixed loading order and win relative path resolution
 0.2.0 (September 20, 2016) 
  * Added appveyor, refactored & structured skeletons
  * Added a License param to New-ForgeModule
