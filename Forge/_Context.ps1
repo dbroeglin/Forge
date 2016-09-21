@@ -1,1 +1,1 @@
-$SkeletonsPath = "$(Split-Path -Parent $PSScriptRoot)\Forge\Skeletons"
+$SkeletonsPath = Join-Path $PSScriptRoot Skeletons
