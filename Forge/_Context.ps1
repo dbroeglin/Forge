@@ -1,3 +1,4 @@
+$ErrorActionPreference = "Stop"
 $ScaffoldsPath = Join-Path $PSScriptRoot Scaffolds
 
 function New-ForgeDirectory {

@@ -27,6 +27,11 @@ function New-ForgeModuleFunction {
 
     .PARAMETER Name
         The name of the new function.
+
+    .PARAMETER Export
+        If $True the function will be added to the list of exported functions in the PSD1 file.
+
+        Default: $True        
     #>
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
     Param(
@@ -35,21 +40,29 @@ function New-ForgeModuleFunction {
 
         [String]$ModuleName,
 
-        [Parameter()]
-        [String[]]$Parameter = @()
+        [String[]]$Parameter = @(),
+
+        [switch]$Export = $True
     )
     Begin {
         $Script:SourcesPath     = Join-Path $ScaffoldsPath ModuleFunction
         $Script:DestinationPath = Get-Location
-        $ModuleName             = Split-Path -Leaf (Get-Location)
+        if (-not $ModuleName) {
+            $ModuleName = Split-Path -Leaf (Get-Location)
+        }
     }
     Process {  
+        $PsdPath = Join-Path $ModuleName "$ModuleName.psd1"
         if (-not (Test-Path -PathType Container $ModuleName)) {
             throw "Module directory '$ModuleName' does not exist"
         }
         if (-not (Test-Path -PathType Container 'Tests')) {
             throw "Test directory 'Tests' does not exist"
         }
+        if ($Export -and -not (Test-Path -PathType Leaf $PsdPath)) {
+            throw "PSD file '$PsdPath' does not exist"
+        }
+
         $Script:Binding = @{
             Name       = $Name
             ModuleName = $ModuleName
@@ -61,5 +74,10 @@ function New-ForgeModuleFunction {
         $TestsFilename    = "$Name.Tests.ps1"
         Copy-ForgeFile -Source "Function.ps1" -Dest (Join-Path $ModuleName $FunctionFilename)
         Copy-ForgeFile -Source "Function.Tests.ps1" -Dest (Join-Path Tests $TestsFilename)
+        if ($Export) {
+            Update-ModuleManifest -Path $PsdPath -FunctionsToExport (
+                (Import-PowerShellDataFile $PsdPath)["FunctionsToExport"] + $Name
+            )
+        }
     }
 }

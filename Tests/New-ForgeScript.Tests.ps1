@@ -3,8 +3,6 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 . "$PSScriptRoot\..\Forge\_Context.ps1"
 . "$PSScriptRoot\..\Forge\$sut"
 
-
-
 Describe "New-ForgeScript" {
     Context "New-ForgeScript -Path test.txt" {
         $TestPath = "TestDrive:\test.txt" 
