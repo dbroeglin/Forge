@@ -1,9 +1,7 @@
 Set-PSDebug -Strict
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
-. "$here\..\Forge\_Context.ps1"
-. "$here\..\Forge\$sut"
-
+. "$PSScriptRoot\..\Forge\_Context.ps1"
+. "$PSScriptRoot\..\Forge\$sut"
 
 Describe "New-ForgeModule" {
     $Name = "TestModule"

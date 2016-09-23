@@ -1,8 +1,7 @@
 Set-PSDebug -Strict
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
-. "$here\..\Forge\_Context.ps1"
-. "$here\..\Forge\$sut"
+. "$PSScriptRoot\..\Forge\_Context.ps1"
+. "$PSScriptRoot\..\Forge\$sut"
 
 Describe "New-ForgeModuleScript" {
     $ModuleName = "TestModule"
@@ -14,12 +13,11 @@ Describe "New-ForgeModuleScript" {
         $TestsPath  = Setup -Dir (Join-Path $ModuleName Tests) -Passthru
         $FunctionName = "TestFunction1"
 
-        it "should generate a function file" {
+        it "should generate a function file with parameters" {
             $FunctionPath = (Join-Path $ModulePath "$FunctionName.ps1")
             $FunctionTestPath = (Join-Path Tests "$FunctionName.Tests.ps1")
 
             New-ForgeModuleFunction -Name $FunctionName -Parameter a1,b1,c1
-            Write-Host (Get-Content -Raw $FunctionPath) 
             $FunctionPath     | Should Exist
             $FunctionPath     | Should Contain "a1,"
             $FunctionPath     | Should Contain "b1,"
