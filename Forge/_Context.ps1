@@ -17,6 +17,10 @@ function Copy-ForgeFile {
         [PSCustomObject]$Binding = $Script:Binding
     )
     $Template = Get-Content -Raw (Join-Path $SourcesPath $Source)
+    if (Test-Path -Type Container $Destination) {
+        $DestinationName = Split-Path -Leaf $Source
+        $Destination = Join-Path $Destination $DestinationName
+    }
     # Write as UTF-8 without BOM
     [System.IO.File]::WriteAllText((Join-Path $Script:DestinationPath $Destination),
         (Expand-Template -Template $template -Binding $Binding))

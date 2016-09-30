@@ -85,7 +85,9 @@ function New-ForgeModule {
         New-ModuleManifest -Path "$Path\$Name\$Name.psd1" -RootModule "$Name.psm1" `
             -ModuleVersion "0.1.0" -Description $Description -Author $Author `
             -Copyright "(c) $CopyrightYear $Author. All rights reserved."
+
         New-ForgeDirectory -Dest "Tests"
+        Copy-ForgeFile -Source "Manifest.Tests.ps1" -Dest "Tests"
 
         if ($License) {
             Copy-ForgeFile -Source "LICENSE.$License" -Dest "LICENSE"

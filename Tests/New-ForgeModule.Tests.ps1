@@ -42,6 +42,11 @@ Describe "New-ForgeModule" {
         It "should create a test directory" {
             "$TestPath\Tests" | Should Exist
         }
+
+        It "should create manifest tests" {
+            "$TestPath\Tests\Manifest.Tests.ps1" | Should Exist
+            "$TestPath\Tests\Manifest.Tests.ps1" | Should Contain "Describe '$Name Manifest"
+        }
     }
 
     Context "-License Apache" {

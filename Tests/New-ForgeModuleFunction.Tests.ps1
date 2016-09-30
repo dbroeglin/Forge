@@ -44,7 +44,6 @@ Describe "New-ForgeModuleFunction" {
         }
     }
 
-
     Context "Incorrect directory structure: no module dir" {
         It "should fail if '<ModuleName>' directory does not exist" {
             Remove-Item -Recurse $ModulePath
