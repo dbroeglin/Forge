@@ -42,7 +42,7 @@ function New-ForgeModuleFunction {
 
         [String[]]$Parameter = @(),
 
-        [switch]$Export = $True
+        [switch]$NoExport
     )
     Begin {
         $Script:SourcesPath     = Join-Path $ScaffoldsPath ModuleFunction
@@ -59,7 +59,7 @@ function New-ForgeModuleFunction {
         if (-not (Test-Path -PathType Container 'Tests')) {
             throw "Test directory 'Tests' does not exist"
         }
-        if ($Export -and -not (Test-Path -PathType Leaf $PsdPath)) {
+        if (!$NoExport -and -not (Test-Path -PathType Leaf $PsdPath)) {
             throw "PSD file '$PsdPath' does not exist"
         }
 
@@ -74,7 +74,7 @@ function New-ForgeModuleFunction {
         $TestsFilename    = "$Name.Tests.ps1"
         Copy-ForgeFile -Source "Function.ps1" -Dest (Join-Path $ModuleName $FunctionFilename)
         Copy-ForgeFile -Source "Function.Tests.ps1" -Dest (Join-Path Tests $TestsFilename)
-        if ($Export) {
+        if (!$NoExport) {
             Update-ModuleManifest -Path $PsdPath -FunctionsToExport (
                 (Import-PowerShellDataFile $PsdPath)["FunctionsToExport"] + $Name
             )
