@@ -33,7 +33,7 @@ function New-ForgeModuleFunction {
 
         Default: $True        
     #>
-    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact='Low')]
+    [CmdletBinding(ConfirmImpact='Low')]
     Param(
         [Parameter(Mandatory = $true)]
         [String]$Name,

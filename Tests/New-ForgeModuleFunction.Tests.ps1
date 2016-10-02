@@ -2,6 +2,8 @@ Set-PSDebug -Strict
 $ErrorActionPreference = "Stop"
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 . "$PSScriptRoot\..\Forge\_Context.ps1"
+. "$PSScriptRoot\..\Forge\New-ForgeDirectory.ps1"
+. "$PSScriptRoot\..\Forge\Copy-ForgeFile.ps1"
 . "$PSScriptRoot\..\Forge\New-ForgeModule.ps1"
 . "$PSScriptRoot\..\Forge\$sut"
 

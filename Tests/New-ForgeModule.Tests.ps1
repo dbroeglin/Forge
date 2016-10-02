@@ -1,6 +1,8 @@
 Set-PSDebug -Strict
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 . "$PSScriptRoot\..\Forge\_Context.ps1"
+. "$PSScriptRoot\..\Forge\New-ForgeDirectory.ps1"
+. "$PSScriptRoot\..\Forge\Copy-ForgeFile.ps1"
 . "$PSScriptRoot\..\Forge\$sut"
 
 Describe "New-ForgeModule" {
