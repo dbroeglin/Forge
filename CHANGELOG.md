@@ -1,7 +1,16 @@
+0.3.2 (October 2, 2016)
+ * Need NoExport switch
+ * Corrected bad copy/paste from main module
+ * Added documentation for New-ForgeModuleFunction
+ * Removed erroneous sourcing of _context.ps1 in generated modules
+ * Refactored New-ForgeDirectory and Copy-ForgeFile into public functions
+ * Added Pester manifest testing to the module scaffold$
+ * Automatically add function to exported functions
+ * Replaced use of MyInvocation by  in tests
+ * Added option to generate a parameter list for a module function
 0.3.1 (September 21, 2016)
  * Added New-ForgeModuleFunction to generate module functions
  * Renamed Skeletons dir to Scaffolds
- * Bumping version number to 0.3.1
  * Added Vagrantfile to for easy testing on Mac
  * Corrected base skeletons path computation
 0.3.0 (September 21, 2016)
