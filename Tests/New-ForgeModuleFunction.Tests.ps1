@@ -19,7 +19,7 @@ Describe "New-ForgeModuleFunction" {
             $FunctionPath = Join-Path $ModulePath "$FunctionName.ps1"
             $FunctionTestPath = Join-Path Tests "$FunctionName.Tests.ps1"
 
-            New-ForgeModuleFunction -Name $FunctionName -Parameter a1,b1,c1 -Export:$False
+            New-ForgeModuleFunction -Name $FunctionName -Parameter a1,b1,c1 -NoExport
             $FunctionPath     | Should Exist
             $FunctionPath     | Should Contain "a1,"
             $FunctionPath     | Should Contain "b1,"
@@ -42,7 +42,7 @@ Describe "New-ForgeModuleFunction" {
         }
 
         BeforeEach {
-            New-ForgeModuleFunction -Name $FunctionName -Export
+            New-ForgeModuleFunction -Name $FunctionName
         }
     }
 
