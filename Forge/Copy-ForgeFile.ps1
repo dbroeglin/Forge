@@ -25,14 +25,25 @@ function Copy-ForgeFile {
     Param(
         [String]$Source,
 
+	    [Alias("Dest")]
         [String]$Destination = $Source,
 
-        [PSCustomObject]$Binding = $Script:Binding
+        [String]$DestinationPath,
+
+        [String]$SourceRoot,
+
+        [PSCustomObject]$Binding,
+
+	# Catch all remaining arguments
+        [Parameter(
+            ValueFromRemainingArguments = $true
+        )]
+        [Object[]]$MyArgs
     )
 
     Write-Verbose "Copying file '$Source' to '$Destination'"
-    $Template = Get-Content -Raw (Join-Path $Script:SourcesPath $Source)
-    $Destination = Join-Path $Script:DestinationPath $Destination
+    $Template = Get-Content -Raw (Join-Path $SourceRoot $Source)
+    $Destination = Join-Path $DestinationPath $Destination
 
     if (Test-Path -Type Container $Destination) {
         Write-Verbose "Destination is a directory"
