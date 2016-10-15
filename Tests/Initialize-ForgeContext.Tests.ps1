@@ -7,7 +7,7 @@ Describe "Initialize-ForgeContext" {
         Initialize-ForgeContext -SourceRoot "source" -DestinationPath "destination"
 
         $Script:ForgeContext.SourceRoot      | Should Be "source"
-        $Script:ForgeContext.DestinationPath | Should Be "$PWD/destination"
+        $Script:ForgeContext.DestinationPath | Should Be (Join-Path $PWD "destination")
         $Script:ForgeContext.Binding         | Should BeOfType [System.Collections.Hashtable]
         $Script:ForgeContext.Binding.Count   | Should Be 0
     }
