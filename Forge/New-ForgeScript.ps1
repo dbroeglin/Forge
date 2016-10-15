@@ -49,35 +49,36 @@ function New-ForgeScript {
             return
         }
 
-        $CommentParamBlock = ($Parameter | ForEach-Object {
-            "    .PARAMETER $_`n        $_ description."
-        }) -join "`n`n" 
-
-        $ParamBlock = ($Parameter | ForEach-Object {
-            "        `$$_"
-        }) -join ",`n" 
+        $Binding = @{
+            Name       = $Name
+            Parameters = $Parameter
+        }
         
-        @"
-function $Name {
+        $Template = @'
+function <%= $Name %> {
     <#
     .SYNOPSIS
-        $Name synopsis.
+        <%= $Name %> synopsis.
 
     .DESCRIPTION
-        $Name description.
+        <%= $Name %> description.
 
     .EXAMPLE
-        $Name #...
+        <%= $Name %> #...
 
         Example description
 
-$CommentParamBlock
-
+<% $Parameters | ForEach { %>
+    .PARAMETER <%= $_ %>
+        <%= $_ %> description.
+        
+<% } %>
     #>
     [CmdletBinding()]
     Param(
-$ParamBlock
+<%= ($Parameters | ForEach { "        `$$_" }) -Join ",`n" %>
     )
+    
     Begin {
         # Begin block
     }
@@ -88,6 +89,9 @@ $ParamBlock
         # End block
     }
 }
-"@ | Out-File -Encoding UTF8 -FilePath $Path
+'@
+
+    [System.IO.File]::WriteAllText($Path,
+        (Expand-Template -Template $template -Binding $Binding))
     }
 }

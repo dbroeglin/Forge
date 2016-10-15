@@ -4,7 +4,7 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 
 Describe "New-ForgeScript" {
     Context "New-ForgeScript -Path test.txt" {
-        $TestPath = "TestDrive:\test.txt" 
+        $TestPath = Join-Path $TestDrive "test.txt" 
         New-ForgeScript -Name "Get-TestScript" -Path $TestPath
 
         It "contains a function declaration" {
@@ -21,7 +21,7 @@ Describe "New-ForgeScript" {
     }
 
     Context "New-ForgeScript -Path test.txt -Parameter a,b" {
-        $TestPath = "TestDrive:\test.txt" 
+        $TestPath = Join-Path $TestDrive "test.txt" 
         New-ForgeScript -Name "Get-TestScript" -Path $TestPath -Parameter a,b
 
         It "contains a parameter documentation for a" {
