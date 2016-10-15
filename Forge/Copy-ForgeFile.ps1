@@ -26,24 +26,13 @@ function Copy-ForgeFile {
         [String]$Source,
 
 	    [Alias("Dest")]
-        [String]$Destination = $Source,
-
-        [String]$DestinationPath,
-
-        [String]$SourceRoot,
-
-        [PSCustomObject]$Binding,
-
-	# Catch all remaining arguments
-        [Parameter(
-            ValueFromRemainingArguments = $true
-        )]
-        [Object[]]$MyArgs
+        [String]$Destination = $Source
     )
 
+    
     Write-Verbose "Copying file '$Source' to '$Destination'"
-    $Template = Get-Content -Raw (Join-Path $SourceRoot $Source)
-    $Destination = Join-Path $DestinationPath $Destination
+    $Template = Get-Content -Raw (Join-Path $Script:ForgeContext.SourceRoot $Source)
+    $Destination = Join-Path $Script:ForgeContext.DestinationPath $Destination
 
     if (Test-Path -Type Container $Destination) {
         Write-Verbose "Destination is a directory"
@@ -54,5 +43,5 @@ function Copy-ForgeFile {
 
     # Write as UTF-8 without BOM
     [System.IO.File]::WriteAllText($Destination,
-        (Expand-Template -Template $template -Binding $Binding))
+        (Expand-Template -Template $Template -Binding $Script:ForgeContext.Binding))
 }

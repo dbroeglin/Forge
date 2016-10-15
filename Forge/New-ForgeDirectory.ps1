@@ -1,5 +1,3 @@
-$coucou = 5
-
 function New-ForgeDirectory {
     <#
     .SYNOPSIS
@@ -21,17 +19,9 @@ function New-ForgeDirectory {
     [CmdletBinding()]
     Param(
 	    [Alias("Dest")]
-        [String]$Destination,
-
-        [String]$DestinationPath = "./",
-
-	    # Catch all remaining arguments
-        [Parameter(
-            ValueFromRemainingArguments = $true
-        )]
-        [Object[]]$MyArgs
+        [String]$Destination
     )
-    $Destination = Join-Path $DestinationPath $Destination
+    $Destination = Join-Path $Script:ForgeContext.DestinationPath $Destination
 
     New-Item -Type Directory -Path $Destination > $Null
 }
