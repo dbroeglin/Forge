@@ -1,0 +1,34 @@
+function <%= $Name %> {
+    <#
+    .SYNOPSIS
+        <%= $Name %> synopsis.
+
+    .DESCRIPTION
+        <%= $Name %> description.
+
+    .EXAMPLE
+        <%= $Name %> #...
+
+        Example description
+
+<% $Parameters | ForEach { %>
+    .PARAMETER <%= $_ %>
+        <%= $_ %> description.
+        
+<% } %>
+    #>
+    [CmdletBinding()]
+    Param(
+<%= ($Parameters | ForEach { "        `$$_" }) -Join ",`n" %>
+    )
+    
+    Begin {
+        # Begin block
+    }
+    Process {
+        # Process block
+    }
+    End {
+        # End block
+    }
+}

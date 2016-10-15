@@ -10,11 +10,26 @@ Describe "Copy-ForgeFile" {
 
     Setup -File (Join-path Templates TEST) -Content "COU<%= `$a %>COU"
 
+    Setup -File (Join-path Templates TEST1.eps) -Content "CUI<%= `$a %>CUI"
+
     It "should copy file" {
         Copy-ForgeFile -Source "TEST"
 
         "$DestinationPath\TEST" | Should Exist
         "$DestinationPath\TEST" | Should Contain "^COU-COU$"
+    }
+
+    It "should copy EPS file" {
+        Copy-ForgeFile -Source "TEST1"
+
+        "$DestinationPath\TEST1" | Should Exist
+        "$DestinationPath\TEST1" | Should Contain "^CUI-CUI$"
+    }
+
+    It "should throw an error if source does not exist" {
+        {
+            Copy-ForgeFile -Source "TEST2"
+        } | Should Throw "Unable to find either 'TEST2' or 'TEST2.eps' source file"
     }
 
     It "should copy file to new name" {

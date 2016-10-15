@@ -38,60 +38,36 @@ function New-ForgeScript {
         [String]$Name,
 
         [Parameter()]
-        [String]$Path = "$Name.ps1",
+        [String]$Path,
 
         [Parameter()]
         [String[]]$Parameter = @()
     )
-
+    Begin {
+        if ($Path) {
+            if (Test-Path -Type Container -Path $Path) {
+                $DestinationPath = $Path
+                $Path = "$Name.psd1"
+            } else {
+                $DestinationPath = Split-Path -Parent -Path $Path
+                $Path = Split-Path -Leaf -Path $Path
+            }
+        } else {
+            $DestinationPath = $PWD
+            $Path = "$Name.ps1"
+        }
+        Initialize-ForgeContext -SourceRoot (Join-Path $PSScriptRoot "Templates") `
+            -DestinationPath $DestinationPath `
+            -Binding @{
+                Name       = $Name
+                Parameters = $Parameter
+            }
+    }
     Process {
         if (!$PSCmdlet.ShouldProcess($Name, "Create script")) {
             return
         }
 
-        $Binding = @{
-            Name       = $Name
-            Parameters = $Parameter
-        }
-        
-        $Template = @'
-function <%= $Name %> {
-    <#
-    .SYNOPSIS
-        <%= $Name %> synopsis.
-
-    .DESCRIPTION
-        <%= $Name %> description.
-
-    .EXAMPLE
-        <%= $Name %> #...
-
-        Example description
-
-<% $Parameters | ForEach { %>
-    .PARAMETER <%= $_ %>
-        <%= $_ %> description.
-        
-<% } %>
-    #>
-    [CmdletBinding()]
-    Param(
-<%= ($Parameters | ForEach { "        `$$_" }) -Join ",`n" %>
-    )
-    
-    Begin {
-        # Begin block
-    }
-    Process {
-        # Process block
-    }
-    End {
-        # End block
-    }
-}
-'@
-
-    [System.IO.File]::WriteAllText($Path,
-        (Expand-Template -Template $template -Binding $Binding))
+        Copy-ForgeFile -Source "Script.ps1" -Destination $Path 
     }
 }

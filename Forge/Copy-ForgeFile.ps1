@@ -29,9 +29,16 @@ function Copy-ForgeFile {
         [String]$Destination = $Source
     )
 
-    
+    $TemplatePath = Join-Path $Script:ForgeContext.SourceRoot $Source
+    if (!(Test-Path -Type Leaf -Path $TemplatePath)) {
+        $TemplatePath = "$TemplatePath.eps"
+        if (!(Test-Path -Type Leaf -Path $TemplatePath)) {
+            throw "Unable to find either '$Source' or '$Source.eps' source file"
+        }
+    }
+
     Write-Verbose "Copying file '$Source' to '$Destination'"
-    $Template = Get-Content -Raw (Join-Path $Script:ForgeContext.SourceRoot $Source)
+    $Template = Get-Content -Raw $TemplatePath
     $Destination = Join-Path $Script:ForgeContext.DestinationPath $Destination
 
     if (Test-Path -Type Container $Destination) {
