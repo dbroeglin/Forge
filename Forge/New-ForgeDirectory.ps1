@@ -19,9 +19,11 @@ function New-ForgeDirectory {
     [CmdletBinding()]
     Param(
 	    [Alias("Dest")]
-        [String]$Destination
+        [String]$Destination,
+
+        [String]$ContextName = $(Get-CallerModuleName)
     )
-    $Destination = Join-Path $Script:ForgeContext.DestinationPath $Destination
+    $Destination = Join-Path (Get-ForgeContext -ContextName $ContextName).DestinationPath $Destination
 
     New-Item -Type Directory -Path $Destination > $Null
 }

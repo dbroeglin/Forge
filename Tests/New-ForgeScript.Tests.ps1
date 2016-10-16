@@ -1,8 +1,13 @@
 Set-PSDebug -Strict
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
+. "$PSScriptRoot\..\Forge\Get-ForgeContext.ps1"
+. "$PSScriptRoot\..\Forge\Copy-ForgeFile.ps1"
+. "$PSScriptRoot\..\Forge\Initialize-ForgeContext.ps1"
 . "$PSScriptRoot\..\Forge\$sut"
 
 Describe "New-ForgeScript" {
+    function Get-CallerModuleName { return "Forge.Test" }
+
     Context "New-ForgeScript -Path test.txt" {
         $TestPath = Join-Path $TestDrive "test.txt" 
         New-ForgeScript -Name "Get-TestScript" -Path $TestPath

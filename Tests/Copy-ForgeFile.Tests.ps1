@@ -1,9 +1,11 @@
 Set-PSDebug -Strict
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
+. "$PSScriptRoot\..\Forge\Get-ForgeContext.ps1"
 . "$PSScriptRoot\..\Forge\Initialize-ForgeContext.ps1"
 . "$PSScriptRoot\..\Forge\$sut"
 
 Describe "Copy-ForgeFile" {
+    function Get-CallerModuleName { return "Forge.Test" }
     Initialize-ForgeContext -SourceRoot (Setup -Dir Templates -PassThru) `
         -DestinationPath ($DestinationPath = Setup -Dir Destination -PassThru) `
         -Binding @{ a = "-" }

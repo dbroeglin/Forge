@@ -11,8 +11,10 @@ function Set-ForgeBinding {
     #>
     [CmdletBinding()]
     Param(
-        [Hashtable]$Binding
+        [Hashtable]$Binding,
+
+        [String]$ContextName = $(Get-CallerModuleName)
     )
 
-    $Script:ForgeContext.Binding = $Binding
+    (Get-ForgeContext -ContextName $ContextName).Binding = $Binding
 }

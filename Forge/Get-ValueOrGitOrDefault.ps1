@@ -9,6 +9,7 @@ function Get-ValueOrGitOrDefault {
 	[String]$Default, 
 
 	[String]$GitCommand = "git"
+    
     )
 
     if ([string]::IsNullOrWhitespace($Value)) {

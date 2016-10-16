@@ -11,6 +11,12 @@ function Get-ForgeContext {
     #>
     [CmdletBinding()]
     Param(
+        [String]$ContextName = $(Get-CallerModuleName)
     )
-    return $Script:ForgeContext
+    
+    $Context = $Script:ForgeContexts[$ContextName]
+    if (!($Context)) {
+        throw "Unable to find context for name '$ContextName', did you call Initialize-ForgeContext ?"
+    }
+    return $Context
 }

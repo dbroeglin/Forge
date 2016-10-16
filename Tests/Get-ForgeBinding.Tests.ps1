@@ -4,8 +4,10 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 . "$PSScriptRoot\..\Forge\$sut"
 
 Describe "Get-ForgeBinding" {
+    function Get-CallerModuleName { return "Forge.Test" }
+
     It "should return the defined binding" {
-        $Script:ForgeContext = @{ Binding = @{ A = 1 }}
+        $Script:ForgeContexts = @{ 'Forge.Test' =  @{ Binding = @{ A = 1 }}}
         
         (Get-ForgeBinding).A | Should Be 1
     }

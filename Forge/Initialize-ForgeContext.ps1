@@ -1,3 +1,5 @@
+$Script:ForgeContexts = @{}
+
 function Initialize-ForgeContext {
     <#
     .SYNOPSIS
@@ -16,10 +18,12 @@ function Initialize-ForgeContext {
         [Parameter(Mandatory = $true)]
         [String]$DestinationPath,
 
-        [Hashtable]$Binding = @{}
+        [Hashtable]$Binding = @{},
+
+        [String]$ContextName = $(Get-CallerModuleName)
     )   
 
-    $Script:ForgeContext = @{
+    $Script:ForgeContexts[$ContextName] = @{
         SourceRoot      = $SourceRoot
         DestinationPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($DestinationPath)
         Binding         = $Binding

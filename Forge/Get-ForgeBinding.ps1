@@ -11,7 +11,8 @@ function Get-ForgeBinding {
     #>
     [CmdletBinding()]
     Param(
+        [String]$ContextName = $(Get-CallerModuleName)
     )
 
-    return (Get-ForgeContext).Binding
+    return (Get-ForgeContext -ContextName $ContextName).Binding
 }

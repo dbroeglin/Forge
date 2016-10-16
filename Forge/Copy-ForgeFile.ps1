@@ -26,10 +26,13 @@ function Copy-ForgeFile {
         [String]$Source,
 
 	    [Alias("Dest")]
-        [String]$Destination = $Source
+        [String]$Destination = $Source,
+
+        [String]$ContextName = $(Get-CallerModuleName)
     )
 
-    $TemplatePath = Join-Path $Script:ForgeContext.SourceRoot $Source
+    $Context = Get-ForgeContext -ContextName $ContextName
+    $TemplatePath = Join-Path $Context.SourceRoot $Source
     if (!(Test-Path -Type Leaf -Path $TemplatePath)) {
         $TemplatePath = "$TemplatePath.eps"
         if (!(Test-Path -Type Leaf -Path $TemplatePath)) {
@@ -39,7 +42,7 @@ function Copy-ForgeFile {
 
     Write-Verbose "Copying file '$Source' to '$Destination'"
     $Template = Get-Content -Raw $TemplatePath
-    $Destination = Join-Path $Script:ForgeContext.DestinationPath $Destination
+    $Destination = Join-Path $Context.DestinationPath $Destination
 
     if (Test-Path -Type Container $Destination) {
         Write-Verbose "Destination is a directory"
@@ -50,5 +53,5 @@ function Copy-ForgeFile {
 
     # Write as UTF-8 without BOM
     [System.IO.File]::WriteAllText($Destination,
-        (Expand-Template -Template $Template -Binding $Script:ForgeContext.Binding))
+        (Expand-Template -Template $Template -Binding $Context.Binding))
 }

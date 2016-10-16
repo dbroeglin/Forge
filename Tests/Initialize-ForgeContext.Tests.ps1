@@ -3,12 +3,15 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path) -replace '\.Tests\.', '.'
 . "$PSScriptRoot\..\Forge\$sut"
 
 Describe "Initialize-ForgeContext" {
+    function Get-CallerModuleName { return "Forge.Test" }
+    
     It "should create a context" {
         Initialize-ForgeContext -SourceRoot "source" -DestinationPath "destination"
 
-        $Script:ForgeContext.SourceRoot      | Should Be "source"
-        $Script:ForgeContext.DestinationPath | Should Be (Join-Path $PWD "destination")
-        $Script:ForgeContext.Binding         | Should BeOfType [System.Collections.Hashtable]
-        $Script:ForgeContext.Binding.Count   | Should Be 0
+        $Context = $Script:ForgeContexts['Forge.Test']
+        $Context.SourceRoot      | Should Be "source"
+        $Context.DestinationPath | Should Be (Join-Path $PWD "destination")
+        $Context.Binding         | Should BeOfType [System.Collections.Hashtable]
+        $Context.Binding.Count   | Should Be 0
     }
 }
