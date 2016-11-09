@@ -4,10 +4,9 @@
 # We serialize XML results and pull them in appveyor.yml
 
 # If Finalize is specified, we collect XML output, upload tests, and indicate build errors
-param([switch]$Finalize)
+param([switch]$Finalize, [String]$PSVersion = $PSVersionTable.PSVersion.Major)
 
 #Initialize some variables, move to the project root
-$PSVersion = $PSVersionTable.PSVersion.Major
 $TestFile = "TestResultsPS$PSVersion.xml"
 $ProjectRoot = $ENV:APPVEYOR_BUILD_FOLDER
 Set-Location $ProjectRoot
