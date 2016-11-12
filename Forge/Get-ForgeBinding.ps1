@@ -1,13 +1,22 @@
 function Get-ForgeBinding {
     <#
     .SYNOPSIS
-        Get-ForgeBinding synopsis.
+        Returns the forge binding.
 
     .DESCRIPTION
-        Get-ForgeBinding description.
+        Returns the forge binding associated with the current caller's module name
+        or the given context name.
 
     .EXAMPLE
-        Get-ForgeBinding #...
+        Return the forge binding associated with the caller's module name.
+
+        Get-ForgeBinding
+
+    .EXAMPLE
+
+        Return the forge binding associated with the given context name.
+
+        Get-ForgeBinding -ContextName Foo
     #>
     [CmdletBinding()]
     Param(

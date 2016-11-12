@@ -1,13 +1,14 @@
 function Get-CallerModuleName {
     <#
     .SYNOPSIS
-        Get-CallerModuleName synopsis.
+        Returns the caller's module name.
 
     .DESCRIPTION
-        Get-CallerModuleName description.
+        Gets the caller's module name by retrieving it from the CallStack invokation
+        information.
 
     .EXAMPLE
-        Get-CallerModuleName #...
+        Get-CallerModuleName
     #>
     [CmdletBinding()]
     Param(

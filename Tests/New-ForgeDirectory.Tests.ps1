@@ -8,7 +8,7 @@ Describe "New-ForgeDirectory" {
     function Get-CallerModuleName { return "Forge.Test" }
     Initialize-ForgeContext -DestinationPath ($DestinationPath = Setup -Dir Destination -PassThru)
 
-    It "should create a directory" {
+    It "should create a directory" { 
         New-ForgeDirectory -Destination "TEST" 
         
         Test-Path -Type Container "$DestinationPath\TEST" | Should Be $True
