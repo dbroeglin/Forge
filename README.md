@@ -21,3 +21,8 @@ Additionally, at build time, the following modules are required:
 
     Install-Module Pester
 
+## Similar projects
+
+* https://github.com/PowerShell/Plaster
+* https://github.com/LaurentDardenne/Template
+* https://github.com/zloeber/PSModuleBuild is based on the excelent Invoke-Build module.
