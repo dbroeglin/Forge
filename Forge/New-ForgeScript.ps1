@@ -44,6 +44,7 @@ function New-ForgeScript {
         [String[]]$Parameter = @()
     )
     Begin {
+        # TODO: this can be simplified, refactor to create a better example
         if ($Path) {
             if (Test-Path -Type Container -Path $Path) {
                 $DestinationPath = $Path
