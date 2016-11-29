@@ -1,4 +1,13 @@
-# 0.4.0 (October 16, 2016)
+## 0.4.1 (2016-11-29)
+
+ * Added an about_Forge topic
+ * Improving README.md documentation
+ * Added a similar projects section to README.md
+ * Better documentation
+ * Creating a functional appveyor build
+
+## 0.4.0 (2016-10-16)
+
  * Refactored to allow each calling module to have it's own context
  * Added proper test for Get-ForgeBinding
  * Refactored New-ForgeScript to use external template
@@ -8,7 +17,8 @@
  * Refactored New-ForgeModule and New-ForgeModuleFunction out to module 'Forge.Module'
  * Corrected Test for -NoExport
 
-# 0.3.2 (October 2, 2016)
+## 0.3.2 (2016-10-02)
+
  * Need NoExport switch
  * Corrected bad copy/paste from main module
  * Added documentation for New-ForgeModuleFunction
@@ -19,17 +29,21 @@
  * Replaced use of MyInvocation by  in tests
  * Added option to generate a parameter list for a module function
 
-# 0.3.1 (September 21, 2016)
+## 0.3.1 (2016-09-21)
+ 
  * Added New-ForgeModuleFunction to generate module functions
  * Renamed Skeletons dir to Scaffolds
+ * Bumping version number to 0.3.1
  * Added Vagrantfile to for easy testing on Mac
  * Corrected base skeletons path computation
 
-# 0.3.0 (September 21, 2016)
+## 0.3.0 (2016-09-21)
+
  * Added .gitignore
  * Fixed loading order and win relative path resolution
 
-# 0.2.0 (September 20, 2016) 
+## 0.2.0 (2016-09-20)
+
  * Added appveyor, refactored & structured skeletons
  * Added a License param to New-ForgeModule
  * Added skeleton content for the module file
@@ -38,5 +52,6 @@
  * Added a New-ForgeModule based on EPS templates
  * Added a first set of tests for New-ForgeScript
 
-# 0.1.0 (August 21, 2016) 
+## 0.2.0 (2016-08-21)
+
  * Initial version with simple New-ForgeScript cmdlet
