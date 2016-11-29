@@ -1,0 +1,42 @@
+TOPIC
+    about_Forge
+
+SHORT DESCRIPTION
+
+    Forge - A set of tools to automate PowerShell code generation    
+
+LONG DESCRIPTION
+
+    The Forge module contains a set of tools to automate PowerShell code generation. It 
+    does nothing by itself. Actual generators are published in separate modules 
+    named Forge.*. Take a look at the Forge.Module generator at
+    https://github.com/dbroeglin/Forge.Module which is a PowerShell module code generator.
+
+    Forge provides support cmdlets that aim at making writing a generator very easy. The most
+    useful cmdlets are:
+    - New-ForgeDirectory: generates a new directory in the destination path.
+    - Copy-ForgeFile: copies a file from the template directory to the destination path. If the 
+    file is an EPS template, the template will be expanded.
+    - Get-ValueOrGitOrDefault: will return the value passed as an argument or, if the value 
+    is absent, it looks in `git config key_name` and return the value. If git is absent or no 
+    config exists, it returns the default value passed as an argument. 
+
+EXAMPLES
+
+    Currently, the best example of a code generator written with Forge is the Forge.Module 
+    module which is a fully featured module generator (Pester tests, git integration, 
+    InvokeBuild or PSake integration, Visual Studio Code integration, etc.) 
+
+    This example is not intended as an actual code generator, just a quick demo of how Forge
+    can be used to generate code. It will generate a Foo.ps1 script in the current directory.
+    The template from which that script is generated is stored in the module directory: 
+    Templates/Script.ps1.eps. 
+
+    New-ForgeScript -Name Foo
+ 
+KEYWORDS
+    Code Generator, Scaffolding, Template
+
+SEE ALSO
+
+    about_Forge.Module
