@@ -16,7 +16,7 @@ limitations under the License.
 
 Set-StrictMode -Version 3
 
-Import-Module EPS 
+Import-Module EPS -MinimumVersion '0.3.1'
 
 # Load functions
 $functions = Get-ChildItem -Path $PSScriptRoot -Recurse -Include *.ps1 | 
