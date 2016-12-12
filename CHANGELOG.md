@@ -1,3 +1,7 @@
+## 0.4.2 (2016-12-12)
+
+ * Upgraded to EPS >= v0.3.1
+
 ## 0.4.1 (2016-11-29)
 
  * Added an about_Forge topic
