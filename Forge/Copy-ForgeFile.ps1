@@ -53,5 +53,5 @@ function Copy-ForgeFile {
 
     # Write as UTF-8 without BOM
     [System.IO.File]::WriteAllText($Destination,
-        (Expand-Template -Template $Template -Binding $Context.Binding))
+        (Invoke-EpsTemplate -Template $Template -Binding $Context.Binding))
 }
