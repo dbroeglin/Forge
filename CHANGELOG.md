@@ -1,3 +1,7 @@
+## 0.4.3 (2016-12-12)
+
+ * Forcing EPS >= v0.3.1 on loading (could no do it in PSD1)
+
 ## 0.4.2 (2016-12-12)
 
  * Upgraded to EPS >= v0.3.1
