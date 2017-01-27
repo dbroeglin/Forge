@@ -1,3 +1,7 @@
+## 0.4.4 (2017-01-26)
+
+ * Remove New-ForgeModule* from exported functions
+
 ## 0.4.3 (2016-12-12)
 
  * Forcing EPS >= v0.3.1 on loading (could no do it in PSD1)
