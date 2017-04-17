@@ -21,7 +21,7 @@ function Copy-ForgeFile {
 
         Name of the file to be generated (relative to the generated directory).        
     #>
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     Param(
         [String]$Source,
 
@@ -51,6 +51,18 @@ function Copy-ForgeFile {
     }
     Write-Verbose "Writing to file '$Destination'"
 
+    if (Test-Path $Destination) {
+        Write-Verbose "Destination '$Destination' already exists"
+        if (-not $PSCmdlet.ShouldContinue(
+            "Overwriting file '$Destination'",
+            "Do you want to overwrite file '$Destination' ?",
+            [ref]$Script:FileConflictConfirmYesToAll,
+            [ref]$Script:FileConflictConfirmNoToAll
+        )) {
+            return
+        }
+    }
+    
     # Write as UTF-8 without BOM
     [System.IO.File]::WriteAllText($Destination,
         (Invoke-EpsTemplate -Template $Template -Binding $Context.Binding))

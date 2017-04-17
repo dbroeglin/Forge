@@ -25,5 +25,9 @@ function New-ForgeDirectory {
     )
     $Destination = Join-Path (Get-ForgeContext -ContextName $ContextName).DestinationPath $Destination
 
-    New-Item -Type Directory -Path $Destination > $Null
+    if (Test-Path -PathType Container $Destination) {
+        Write-Verbose "Directory '$Destination' already exists: skipping."
+    } else {
+        New-Item -Type Directory -Path $Destination > $Null
+    }
 }

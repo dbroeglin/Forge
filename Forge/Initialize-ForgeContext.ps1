@@ -23,9 +23,12 @@ function Initialize-ForgeContext {
         [String]$ContextName = $(Get-CallerModuleName)
     )   
 
+    $Script:FileConflictConfirmYesToAll = $False
+    $Script:FileConflictConfirmNoToAll = $False
+
     $Script:ForgeContexts[$ContextName] = @{
-        SourceRoot      = $SourceRoot
-        DestinationPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($DestinationPath)
-        Binding         = $Binding
+        SourceRoot                  = $SourceRoot
+        DestinationPath             = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($DestinationPath)
+        Binding                     = $Binding
     }            
 }
