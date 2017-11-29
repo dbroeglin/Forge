@@ -18,14 +18,14 @@ Describe "Copy-ForgeFile" {
         Copy-ForgeFile -Source "TEST"
 
         "$DestinationPath\TEST" | Should Exist
-        "$DestinationPath\TEST" | Should Contain "^COU-COU$"
+        "$DestinationPath\TEST" | Should -FileContentMatch "^COU-COU$"
     }
 
     It "should copy EPS file" {
         Copy-ForgeFile -Source "TEST1"
 
         "$DestinationPath\TEST1" | Should Exist
-        "$DestinationPath\TEST1" | Should Contain "^CUI-CUI$"
+        "$DestinationPath\TEST1" | Should -FileContentMatch "^CUI-CUI$"
     }
 
     It "should throw an error if source does not exist" {
@@ -39,7 +39,7 @@ Describe "Copy-ForgeFile" {
 
         "$DestinationPath\TEST"  | Should Not Exist
         "$DestinationPath\TEST1" | Should Exist
-        "$DestinationPath\TEST1" | Should Contain "^COU-COU$"
+        "$DestinationPath\TEST1" | Should -FileContentMatch "^COU-COU$"
     }
 
     It "should copy file to directory" {
@@ -48,7 +48,7 @@ Describe "Copy-ForgeFile" {
         Copy-ForgeFile -Source "TEST" -Destination SomeDir
 
         "$SomeDirectory\TEST"  | Should Exist
-        "$SomeDirectory\TEST"  | Should Contain "^COU-COU$"
+        "$SomeDirectory\TEST"  | Should -FileContentMatch "^COU-COU$"
     }
 
     AfterEach {

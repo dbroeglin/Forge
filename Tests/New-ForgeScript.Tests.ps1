@@ -13,15 +13,15 @@ Describe "New-ForgeScript" {
         New-ForgeScript -Name "Get-TestScript" -Path $TestPath
 
         It "contains a function declaration" {
-            $TestPath | Should Contain 'function Get-TestScript'
+            $TestPath | Should -FileContentMatch 'function Get-TestScript'
         }
 
         It "contains a synopsis" {
-            $TestPath | Should Contain '.SYNOPSIS'
+            $TestPath | Should -FileContentMatch '.SYNOPSIS'
         }
 
         It "contains a description" {
-            $TestPath | Should Contain '.DESCRIPTION'
+            $TestPath | Should -FileContentMatch '.DESCRIPTION'
         }    
     }
 
@@ -30,19 +30,19 @@ Describe "New-ForgeScript" {
         New-ForgeScript -Name "Get-TestScript" -Path $TestPath -Parameter a,b
 
         It "contains a parameter documentation for a" {
-            $TestPath | Should Contain '.PARAMETER a'
+            $TestPath | Should -FileContentMatch '.PARAMETER a'
         }
 
         It "contains a parameter declaration for a" {
-            $TestPath | Should Contain '\$a,'
+            $TestPath | Should -FileContentMatch '\$a,'
         }
 
         It "contains a parameter documentation for b" {
-            $TestPath | Should Contain '.PARAMETER b'
+            $TestPath | Should -FileContentMatch '.PARAMETER b'
         }
 
         It "contains a parameter declaration for b" {
-            $TestPath | Should Contain '\$b'
+            $TestPath | Should -FileContentMatch '\$b'
         }     
     }
 }
